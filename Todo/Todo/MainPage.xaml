@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Todo.MainPage"
+             xmlns:viewModels="clr-namespace:Todo.ViewModels;assembly=Todo"
+             xmlns:models="clr-namespace:Todo.Models;assembly=Todo"
+             x:DataType="viewModels:MainViewModel">
+
+    <Grid Grid.RowDefinitions="*" Grid.ColumnDefinitions="*">
+        <StackLayout Grid.Row="0" BackgroundColor="#151a20" Grid.Column="0" Orientation="Vertical" Padding="20" Spacing="20">
+            <FlexLayout JustifyContent="SpaceBetween">
+                <Frame Padding="15, 10, 15, 10"
+                   CornerRadius="5"
+                   BackgroundColor="#879ea8"
+                   FlexLayout.Basis="75%">
+                    <Entry Placeholder="To do ?"
+                       Text="{Binding nameOfCase, Mode=TwoWay}"/>
+                </Frame>
+                <Button Text="+"
+                         BackgroundColor="#879ea8"
+                         Padding="0, 0, 0, 0"
+                         FontSize="54"
+                         FlexLayout.Basis="20%"
+                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=CaseAddCollection}">
+                    <Button.Triggers>
+                        <EventTrigger Event="Clicked">
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>
+            </FlexLayout>
+            <StackLayout Orientation="Vertical">
+                <ListView ItemsSource="{Binding TodoCollection}"
+                          RowHeight="60"
+                          HeightRequest="1000"
+                          SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Frame Padding="5"
+                                           CornerRadius="5"
+                                           Margin="3"
+                                           BorderColor="#879ea8">
+
+                                        <Frame.Triggers>
+                                            <DataTrigger Binding="{Binding Ready, Mode=OneWay}" Value="True"
+                                                         TargetType="{x:Type Frame}">
+                                                <Setter Property="Frame.BackgroundColor" Value="#86ae98" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Ready, Mode=OneWay}" Value="False"
+                                                         TargetType="{x:Type Frame}">
+                                                <Setter Property="Frame.BackgroundColor" Value="#879ea8" />
+                                            </DataTrigger>
+                                        </Frame.Triggers>
+
+                                        <FlexLayout x:DataType="{x:Type models:Task}"
+                                                    JustifyContent="SpaceBetween">
+                                            <CheckBox IsChecked="{Binding Ready, Mode=TwoWay}"
+                                                      FlexLayout.Basis="10%"
+                                                      Color="Blue"/>
+                                            <Label Text="{Binding Name}"
+                                                   TextColor="Black"
+                                                   VerticalTextAlignment="Center">
+                                            </Label>
+                                            <Button Text="Delete"
+                                                    FontSize="12"
+                                                    TextColor="White"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=CaseDeleteCollection}"
+                                                         CommandParameter="{Binding .}"
+                                                         BackgroundColor="black"/>
+                                        </FlexLayout>
+                                    </Frame>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+</ContentPage>
